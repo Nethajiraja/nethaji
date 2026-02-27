@@ -20,8 +20,11 @@ if st.button("Get Best Move"):
         try:
             engine = chess.engine.SimpleEngine.popen_uci(STOCKFISH_PATH)
             result = engine.analyse(board, chess.engine.Limit(depth=15))
-            best_move = result["pv"][0]
-            st.success(f"Best Move: {best_move}")
+            if "pv" in result and len(result["pv"]) > 0:
+                best_move = result["pv"][0]
+                st.success(f"Best Move: {best_move}")
+            else:
+                st.warning("No best move found in the analysis.")
         except FileNotFoundError:
             st.error("Stockfish engine not found. Please install Stockfish.")
         except Exception as e:
