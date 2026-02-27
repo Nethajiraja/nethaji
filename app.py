@@ -4,11 +4,11 @@ import chess.engine
 
 # Change this path if needed (for local testing)
 STOCKFISH_PATH = "stockfish"
+DEFAULT_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
 st.title("♟️ Online Chess Best Move Bot")
 
-fen = st.text_area("Enter FEN Position:", 
-                   "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+fen = st.text_area("Enter FEN Position:", DEFAULT_FEN)
 
 if st.button("Get Best Move"):
     try:
