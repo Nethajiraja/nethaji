@@ -13,13 +13,19 @@ fen = st.text_area("Enter FEN Position:",
 if st.button("Get Best Move"):
     try:
         board = chess.Board(fen)
-
-        engine = chess.engine.SimpleEngine.popen_uci(STOCKFISH_PATH)
-        result = engine.analyse(board, chess.engine.Limit(depth=15))
-        best_move = result["pv"][0]
-        engine.quit()
-
-        st.success(f"Best Move: {best_move}")
-
-    except Exception as e:
-        st.error("Invalid FEN or Engine Error")
+    except ValueError:
+        st.error("Invalid FEN position. Please check your input.")
+    else:
+        engine = None
+        try:
+            engine = chess.engine.SimpleEngine.popen_uci(STOCKFISH_PATH)
+            result = engine.analyse(board, chess.engine.Limit(depth=15))
+            best_move = result["pv"][0]
+            st.success(f"Best Move: {best_move}")
+        except FileNotFoundError:
+            st.error("Stockfish engine not found. Please install Stockfish.")
+        except Exception as e:
+            st.error(f"Engine error: {str(e)}")
+        finally:
+            if engine is not None:
+                engine.quit()
